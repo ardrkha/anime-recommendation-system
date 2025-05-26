@@ -166,9 +166,8 @@ Root Mean Squared Error (RMSE):
 Metrik ini digunakan karena dataset ini berupa data rating numerik, dan RMSE dapat memberikan gambaran seberapa jauh prediksi model terhadap nilai aktual.
 
 **Hasil Evaluasi**
+- Dari grafik hasil training model, terlihat bahwa nilai RMSE pada data training dan validation terus menurun dan stabil, menunjukkan bahwa model berhasil mempelajari representasi preferensi pengguna dengan cukup baik. Berikut adalah visualisasi metriknya:
 ![rmse](assets/rmse.png)
-- Dari grafik hasil training model, terlihat bahwa nilai RMSE pada data training dan validation terus menurun dan stabil, menunjukkan bahwa model berhasil mempelajari representasi preferensi pengguna dengan cukup baik.
-
 
 - Prediksi rating terhadap anime yang belum ditonton untuk user tertentu menunjukkan hasil yang masuk akal, dan 10 rekomendasi teratas mencerminkan relevansi terhadap anime yang sebelumnya disukai oleh pengguna tersebut.
 
