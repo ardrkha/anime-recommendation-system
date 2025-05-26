@@ -64,8 +64,8 @@ Data ini terdiri dari 12.294 baris. Berikut ini adalah kondisi data sebelum dila
 - Duplikat = 0
 
 Berikut adalah visualisasi heatmap nilai null, dan histogram sebaran awal:
-![Histogram1](assets/histogram1.png)
-![HeatmapNull1](assets/histogram1.png)
+![Histogram1](assets/Histogram1.png)
+![HeatmapNull1](assets/HeatmapNull1.png)
 
 2. rating.csv
 Berisi data rating yang diberikan oleh pengguna terhadap anime.
@@ -81,8 +81,8 @@ Data ini terdiri dari 7.813.737 baris. Berikut ini adalah kondisi data sebelum d
 - Duplikat = 1
 
 Berikut adalah visualisasi heatmap nilai null, dan histogram sebaran awal:
-![Histogram2](assets/histogram2.png)
-![HeatmapNull2](assets/histogram2.png)
+![Histogram2](assets/Histogram2.png)
+![HeatmapNull2](assets/HeatmapNull1.png)
 
 \
 **Exploratory Data Analysis (EDA)**
@@ -161,14 +161,7 @@ Kekurangan:
 Pada model Collaborative Filtering, digunakan metrik:
 
 Root Mean Squared Error (RMSE):
-\[
-\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left( \hat{y}_i - y_i \right)^2}
-\]
-
-Keterangan:
-- \( n \): jumlah data (observasi)
-- \( \hat{y}_i \): nilai prediksi ke-i
-- \( y_i \): nilai aktual ke-i
+![rmse_formula](assets/rmse_formula.jpg)
 
 Metrik ini digunakan karena dataset ini berupa data rating numerik, dan RMSE dapat memberikan gambaran seberapa jauh prediksi model terhadap nilai aktual.
 
