@@ -118,14 +118,27 @@ Langkah ini dilanjutkan dengan membuat struktur dictionary dalam bentuk DataFram
 Alasan dilakukan:
 Konversi ke dalam bentuk list mempermudah proses transformasi fitur, pencocokan konten (genre), dan pengembangan model sistem rekomendasi berbasis konten. Selain itu, struktur dictionary sangat berguna dalam membangun indeks dan representasi data yang efisien.
 
-## Modeling
+## Modeling and Result
 Pada proyek ini, dibangun dua model sistem rekomendasi menggunakan pendekatan berbeda: Content-Based Filtering (CBF) dan Collaborative Filtering (CF). Keduanya digunakan untuk menghasilkan Top-N Recommendation, dengan N=10.
 
 **1. Content-Based Filtering (CBF)**
 Pendekatan pertama menggunakan teknik Content-Based Filtering dengan memanfaatkan informasi dari kolom genre setiap anime.
 - Representasi Fitur: Genre diubah menjadi representasi vektor menggunakan TF-IDF Vectorizer, yang menilai pentingnya suatu genre dalam sebuah anime dibandingkan dengan keseluruhan dataset.
 - Perhitungan Similarity: Dihitung dengan cosine similarity antara representasi vektor TF-IDF setiap anime.
-- Output: Fungsi anime_recommendations() akan mengembalikan 10 rekomendasi anime yang paling mirip berdasarkan genre dengan anime input yang diberikan pengguna, contohnya: Fullmetal Alchemist: Brotherhood.
+
+Result: Fungsi anime_recommendations() akan mengembalikan top-10 rekomendasi anime yang paling mirip berdasarkan genre dengan anime input yang diberikan pengguna. 
+Contohnya: Fullmetal Alchemist: Brotherhood.
+Menghasilkan rekomendasi:
+1. Fullmetal Alchemist: The Sacred Star of Milos =Action, Adventure, Comedy, Drama, Fantasy, Mag...
+2. Fullmetal Alchemist	= Action, Adventure, Comedy, Drama, Fantasy, Mag...
+3. Tales of Vesperia: The First Strike	= Action, Adventure, Fantasy, Magic, Military
+4. Tide-Line Blue	= Action, Adventure, Drama, Military, Shounen
+5. Fullmetal Alchemist: Brotherhood Specials = Adventure, Drama, Fantasy, Magic, Military, Sh...
+6. Jikuu Tenshou Nazca	= Action, Adventure, Drama, Fantasy, Magic
+7. Fire Emblem	= Action, Adventure, Fantasy, Magic, Shounen
+8. Meoteoldosa	= Action, Adventure, Fantasy, Magic, Shounen
+9. Magi: Sinbad no Bouken	= Action, Adventure, Fantasy, Magic, Shounen
+10. Dragon Quest: Dai no Daibouken Buchiyabure!! S...	== Action, Adventure, Fantasy, Magic, Shounen
 
 Kelebihan:
 - Tidak memerlukan data dari pengguna lain.
@@ -144,7 +157,27 @@ Pendekatan kedua menggunakan Collaborative Filtering berbasis Neural Network, ya
 2. Penjumlahan antara dot product user-anime dengan bias user dan anime.
 2. Aktivasi sigmoid untuk menghasilkan prediksi rating.
 - Training: Model dilatih menggunakan Binary Crossentropy loss dan dievaluasi dengan Root Mean Squared Error (RMSE).
-- Output: Menghasilkan prediksi rating terhadap anime yang belum ditonton oleh user tertentu, lalu disortir untuk memilih Top 10 anime rekomendasi.
+
+Result: Menghasilkan prediksi rating terhadap anime yang belum ditonton oleh user tertentu, lalu disortir untuk memilih Top 10 anime rekomendasi.
+Contohnya: Users: 59476
+Anime yang diberi rating tinggi oleh user:
+- Beck : Comedy, Drama, Music, Shounen, Slice of Life
+- Pokemon: Mewtwo no Gyakushuu : Action, Adventure, Comedy, Drama, Fantasy, Kids
+- Kage kara Mamoru! : Comedy, Romance, Shounen
+- Suzumiya Haruhi no Yuuutsu : Comedy, Mystery, Parody, School, Sci-Fi, Slice of Life
+- Zero no Tsukaima: Futatsuki no Kishi : Action, Adventure, Comedy, Ecchi, Fantasy, Harem, Magic, Romance, School
+
+Top 10 anime rekomendasi:
+1. Ginga Eiyuu Densetsu : Drama, Military, Sci-Fi, Space
+2. Gintama : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+3. Fullmetal Alchemist: Brotherhood : Action, Adventure, Drama, Fantasy, Magic, Military, Shounen
+4. Steins;Gate : Sci-Fi, Thriller
+5. Gintama&#039; : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+6. Hunter x Hunter (2011) : Action, Adventure, Shounen, Super Power
+7. Gintama Movie: Kanketsu-hen - Yorozuya yo Eien Nare : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+8. Gintama&#039;: Enchousen : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+9. Gintama° : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+10. Kimi no Na wa. : Drama, Romance, School, Supernatural
 
 Kelebihan:
 - Mampu menangkap preferensi unik setiap pengguna.
