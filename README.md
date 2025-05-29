@@ -232,15 +232,25 @@ Metrik ini digunakan karena dataset ini berupa data rating numerik, dan RMSE dap
 - Contoh input:
 "Fullmetal Alchemist: Brotherhood" → Genre: Action, Adventure, Drama, Fantasy, Magic, Military
 - Rekomendasi yang dihasilkan memiliki genre yang sangat mirip, seperti:
+
 1). Fullmetal Alchemist: The Sacred Star of Milos
+
 2). Tales of Vesperia: The First Strike
+
 3). Jikuu Tenshou Nazca
+
 4). Fire Emblem
+
 5). dll.
+
 - Observasi:
+
 1). Semua anime yang direkomendasikan memiliki kesamaan genre yang tinggi.
+
 2). Rekomendasi dirasa relevan dan masuk akal dari sisi konten, meskipun tidak mempertimbangkan histori rating pengguna.
+
 3). Cocok untuk cold-start problem, terutama bagi pengguna baru tanpa histori interaksi.
+
 
 
 2. Collaborative Filtering
@@ -250,14 +260,23 @@ Metrik ini digunakan karena dataset ini berupa data rating numerik, dan RMSE dap
 ![rmse](assets/rmse.png)
 
 - Prediksi rating terhadap anime yang belum ditonton untuk user tertentu menunjukkan hasil yang masuk akal, dan 10 rekomendasi teratas mencerminkan relevansi terhadap anime yang sebelumnya disukai oleh pengguna tersebut, contohnya:
+
 1). Monster
+
 2). Ginga Eiyuu Densetsu
+
 3). Gintama
+
 4). Mushishi Zoku Shou
+
 5). dll.
+
 - Observasi:
+
 1). Rekomendasi personal dan relevan.
+
 2). Akurasi model dapat diukur secara kuantitatif menggunakan RMSE.
+
 
 **Perbandingan Pendekatan**
 | Pendekatan              | Teknik                              | Fitur/Target Data | Metrik Evaluasi   | Hasil & Observasi                                   |
@@ -269,26 +288,41 @@ Metrik ini digunakan karena dataset ini berupa data rating numerik, dan RMSE dap
 Model ini dikembangkan untuk menyediakan sistem rekomendasi anime yang relevan dan personal guna meningkatkan pengalaman pengguna dalam menemukan anime yang sesuai dengan preferensi mereka. Pendekatan ini bertujuan untuk menjawab kebutuhan pengguna dalam mencari anime secara cepat, efisien, dan sesuai minat.
 
 - Problem Statements:
+
 1). Bagaimana cara mengembangkan sistem rekomendasi berbasis content-based filtering untuk memberikan rekomendasi anime yang sesuai preferensi pengguna?
-2) Bagaimana cara mengembangkan sistem rekomendasi berbasis collaborative filtering untuk memberikan rekomendasi anime yang sesuai preferensi pengguna?
+
+2). Bagaimana cara mengembangkan sistem rekomendasi berbasis collaborative filtering untuk memberikan rekomendasi anime yang sesuai preferensi pengguna?
+
 
 - Goals:
+
 1). Mengembangkan sistem rekomendasi berbasis content-based filtering yang mampu menyarankan anime dengan genre serupa berdasarkan preferensi pengguna.
+
 2). Mengembangkan sistem rekomendasi berbasis collaborative filtering yang mampu memberikan rekomendasi personal berdasarkan data interaksi pengguna sebelumnya.
 
+
 - Evaluasi Solusi:
+
 1). Content-Based Filtering
+
 ✔ Cocok untuk pengguna baru (cold-start problem) karena hanya membutuhkan preferensi awal atau genre anime yang disukai.
 ✔ Memberikan hasil rekomendasi yang relevan berdasarkan kemiripan fitur genre.
+
 2). Collaborative Filtering
+
 ✔ Menghasilkan rekomendasi personal berdasarkan pola perilaku pengguna lain dengan preferensi serupa.
 ✔ Memerlukan data interaksi pengguna (seperti rating) dan efektif untuk pengguna aktif.
 
 - Dampak terhadap Tujuan
+
 1). Pendekatan ganda ini terbukti mampu:
+
 2). Menjawab kedua problem statements secara spesifik.
+
 3). Mencapai goals yang telah ditentukan melalui pendekatan sistematis.
+
 4). Meningkatkan pengalaman pengguna dengan menghadirkan rekomendasi yang lebih relevan, baik untuk pengguna baru maupun lama.
+
 
 
 
