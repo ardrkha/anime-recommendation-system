@@ -210,6 +210,7 @@ Cosine Similarity digunakan sebagai metrik evaluasi untuk mengukur kemiripan ant
 Cosine Similarity digunakan sebagai metrik untuk mengukur tingkat kemiripan antar anime berdasarkan genre.
 Rumus Cosine Similarity secara matematis:
 ![cos](assets/cos.png)
+
 Di mana:
 - A dan B adalah vektor genre dari dua anime,
 - Nilai cosine similarity berkisar antara 0 (tidak mirip) hingga 1 (sangat mirip).
@@ -306,12 +307,16 @@ Model ini dikembangkan untuk menyediakan sistem rekomendasi anime yang relevan d
 1). Content-Based Filtering
 
 ✔ Cocok untuk pengguna baru (cold-start problem) karena hanya membutuhkan preferensi awal atau genre anime yang disukai.
+
 ✔ Memberikan hasil rekomendasi yang relevan berdasarkan kemiripan fitur genre.
+
 
 2). Collaborative Filtering
 
 ✔ Menghasilkan rekomendasi personal berdasarkan pola perilaku pengguna lain dengan preferensi serupa.
+
 ✔ Memerlukan data interaksi pengguna (seperti rating) dan efektif untuk pengguna aktif.
+
 
 - Dampak terhadap Tujuan
 
