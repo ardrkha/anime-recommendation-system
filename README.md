@@ -94,29 +94,41 @@ Dilakukan Univariate Analysis untuk masing-masing data yang menunjukkan distribu
 ## Data Preparation
 
 Tahap data preparation dilakukan untuk memastikan data siap digunakan dalam pelatihan model machine learning. Adapun langkah-langkah yang dilakukan adalah sebagai berikut:
-
-1. Mengatasi Missing Value
+1. Menggabungkan data dengan Fitur anime_id
+Sebelum dilakukan pembersihan data, dua dataset utama digabungkan berdasarkan fitur `anime_id`. Alasan dilakukan:
+Untuk menyatukan informasi dari data anime (seperti judul, genre, skor, dll.) dengan data interaksi user (seperti rating yang diberikan oleh pengguna). Proses ini menghasilkan satu dataframe terpadu yang merepresentasikan hubungan antara pengguna dan anime yang telah mereka nilai.
+2. Mengatasi Missing Value
 Langkah awal adalah memeriksa nilai yang hilang (missing value) pada data hasil penggabungan antara file anime.csv dan rating.csv, yang telah disimpan dalam variabel data_merged.
 Setelah dilakukan pengecekan, ditemukan adanya data yang memiliki nilai kosong (NaN). Oleh karena itu, dilakukan pembersihan data menggunakan fungsi dropna().
 Alasan dilakukan:
 Data dengan nilai kosong dapat menyebabkan error atau bias saat proses training model. Menghapusnya adalah pendekatan yang umum dilakukan terutama jika proporsi data yang hilang kecil dan tidak berdampak signifikan pada representasi data secara keseluruhan.
 
-2. Mengurutkan Data Berdasarkan anime_id
+3. Mengurutkan Data Berdasarkan anime_id
 Setelah data bersih dari missing value, langkah selanjutnya adalah mengurutkan data berdasarkan kolom anime_id.
 Alasan dilakukan:
 Pengurutan berdasarkan ID membantu dalam indexing dan proses selanjutnya seperti pencocokan ID saat dilakukan merge dengan data lain atau saat rekomendasi berdasarkan ID.
 
 
-3. Menghapus Data Duplikat
+4. Menghapus Data Duplikat
 Langkah selanjutnya adalah menghapus baris data yang memiliki anime_id duplikat. Proses ini dilakukan untuk memastikan bahwa setiap anime hanya memiliki satu entri unik dalam data yang digunakan untuk rekomendasi.
 Alasan dilakukan:
 Keberadaan data duplikat dapat menyebabkan bias dalam analisis maupun model, misalnya anime tertentu bisa dianggap lebih populer karena terhitung lebih dari sekali.
 
-4. Mengonversi Data ke Dalam Bentuk List
+5. Mengonversi Data ke Dalam Bentuk List
 Data kemudian diproses lebih lanjut ke dalam format list yang nantinya akan digunakan dalam proses pencocokan dan sistem rekomendasi berbasis konten (content-based filtering).
 Langkah ini dilanjutkan dengan membuat struktur dictionary dalam bentuk DataFrame yang berisi kolom id, anime_name, dan genre.
 Alasan dilakukan:
 Konversi ke dalam bentuk list mempermudah proses transformasi fitur, pencocokan konten (genre), dan pengembangan model sistem rekomendasi berbasis konten. Selain itu, struktur dictionary sangat berguna dalam membangun indeks dan representasi data yang efisien.
+
+6. Ekstraksi Fitur Menggunakan TF-IDF (Untuk Content-Based Filtering)
+Genre pada anime merupakan fitur tekstual. Untuk mengubahnya menjadi representasi numerik yang bisa diproses model, digunakan teknik TF-IDF (Term Frequency - Inverse Document Frequency). Pemrosesan ini dilakukan menggunakan TfidfVectorizer dari scikit-learn. Hasilnya berupa matriks fitur dengan bobot numerik berdasarkan pentingnya genre dalam keseluruhan koleksi anime.
+Alasan dilakukan:
+TF-IDF membantu mengukur seberapa relevan genre tertentu terhadap tiap anime, meningkatkan kualitas pemetaan konten untuk filtering berbasis konten.
+
+7. Pembagian Dataset (Untuk Collaborative Filtering)
+Dilakukan pembagian data menjadi data latih (training) dan data uji (testing). Pembagian dilakukan secara acak (80% train dan 20% test). Data ini akan digunakan untuk melatih model rekomendasi berdasarkan pola interaksi pengguna.
+Alasan dilakukan: 
+Pembagian dataset diperlukan agar model dapat dievaluasi dengan benar dan tidak mengalami overfitting.
 
 ## Modeling and Result
 Pada proyek ini, dibangun dua model sistem rekomendasi menggunakan pendekatan berbeda: Content-Based Filtering (CBF) dan Collaborative Filtering (CF). Keduanya digunakan untuk menghasilkan Top-N Recommendation, dengan N=10.
@@ -155,29 +167,29 @@ Pendekatan kedua menggunakan Collaborative Filtering berbasis Neural Network, ya
 - Arsitektur Model:
 1. Embedding Layer untuk user dan anime.
 2. Penjumlahan antara dot product user-anime dengan bias user dan anime.
-2. Aktivasi sigmoid untuk menghasilkan prediksi rating.
-- Training: Model dilatih menggunakan Binary Crossentropy loss dan dievaluasi dengan Root Mean Squared Error (RMSE).
+2. Output langsung menghasilkan skor prediksi rating, tanpa fungsi aktivasi non-linear di lapisan akhir.
+- Training: Model dilatih menggunakan fungsi loss Mean Squared Error (MSE) karena targetnya adalah rating numerik eksplisit dalam rentang 1–10. Evaluasi model menggunakan metrik Root Mean Squared Error (RMSE) untuk mengukur rata-rata deviasi prediksi terhadap nilai rating aktual.
 
 Result: Menghasilkan prediksi rating terhadap anime yang belum ditonton oleh user tertentu, lalu disortir untuk memilih Top 10 anime rekomendasi.
-Contohnya: Users: 59476
+Contohnya: Users: 25212
 Anime yang diberi rating tinggi oleh user:
-- Beck : Comedy, Drama, Music, Shounen, Slice of Life
-- Pokemon: Mewtwo no Gyakushuu : Action, Adventure, Comedy, Drama, Fantasy, Kids
-- Kage kara Mamoru! : Comedy, Romance, Shounen
-- Suzumiya Haruhi no Yuuutsu : Comedy, Mystery, Parody, School, Sci-Fi, Slice of Life
-- Zero no Tsukaima: Futatsuki no Kishi : Action, Adventure, Comedy, Ecchi, Fantasy, Harem, Magic, Romance, School
+- Cowboy Bebop = Action, Adventure, Comedy, Drama, Sci-Fi, Space
+- Neon Genesis Evangelion = Action, Dementia, Drama, Mecha, Psychological, Sci-Fi
+- Neon Genesis Evangelion: The End of Evangelion = Dementia, Drama, Mecha, Psychological, Sci-Fi
+- Berserk = Action, Adventure, Demons, Drama, Fantasy, Horror, Military, Romance, Seinen, Supernatural
+- Ghost in the Shell = Action, Mecha, Police, Psychological, Sci-Fi, Seinen
 
 Top 10 anime rekomendasi:
-1. Ginga Eiyuu Densetsu : Drama, Military, Sci-Fi, Space
-2. Gintama : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
-3. Fullmetal Alchemist: Brotherhood : Action, Adventure, Drama, Fantasy, Magic, Military, Shounen
-4. Steins;Gate : Sci-Fi, Thriller
-5. Gintama&#039; : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
-6. Hunter x Hunter (2011) : Action, Adventure, Shounen, Super Power
-7. Gintama Movie: Kanketsu-hen - Yorozuya yo Eien Nare : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
-8. Gintama&#039;: Enchousen : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
-9. Gintama° : Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
-10. Kimi no Na wa. : Drama, Romance, School, Supernatural
+1. Monster = Drama, Horror, Mystery, Police, Psychological, Seinen, Thriller
+2. Ginga Eiyuu Densetsu = Drama, Military, Sci-Fi, Space
+3. Gintama = Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+4. Gintama&#039; = Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+5. Gintama Movie: Kanketsu-hen - Yorozuya yo Eien Nare = Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+6. Gintama&#039;: Enchousen = Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+7. Mushishi Zoku Shou 2nd Season = Adventure, Fantasy, Historical, Mystery, Seinen, Slice of Life, Supernatural
+8. Gintama° = Action, Comedy, Historical, Parody, Samurai, Sci-Fi, Shounen
+9. Kimi no Na wa. = Drama, Romance, School, Supernatural
+10. Haikyuu!!: Karasuno Koukou VS Shiratorizawa Gakuen Koukou = Comedy, Drama, School, Shounen, Sports
 
 Kelebihan:
 - Mampu menangkap preferensi unik setiap pengguna.
@@ -191,6 +203,21 @@ Kekurangan:
 ## Evaluation
 
 **Metrik Evaluasi**
+Dalam proyek ini digunakan dua pendekatan sistem rekomendasi: Content-Based Filtering dan Collaborative Filtering berbasis Neural Network. Masing-masing pendekatan memiliki karakteristik data dan teknik yang berbeda, sehingga metrik evaluasi yang digunakan pun disesuaikan:
+1. Content-Based Filtering
+
+Cosine Similarity digunakan sebagai metrik evaluasi untuk mengukur kemiripan antar item (anime).
+Cosine Similarity digunakan sebagai metrik untuk mengukur tingkat kemiripan antar anime berdasarkan genre.
+Rumus Cosine Similarity secara matematis:
+![cos](assets/cos.png)
+Di mana:
+- A dan B adalah vektor genre dari dua anime,
+- Nilai cosine similarity berkisar antara 0 (tidak mirip) hingga 1 (sangat mirip).
+
+Cosine similarity ini menentukan urutan rekomendasi: semakin tinggi nilainya, semakin besar kemungkinan pengguna akan menyukai anime tersebut berdasarkan genre.
+
+2. Collaborative Filtering
+
 Pada model Collaborative Filtering, digunakan metrik:
 
 Root Mean Squared Error (RMSE):
@@ -199,10 +226,70 @@ Root Mean Squared Error (RMSE):
 Metrik ini digunakan karena dataset ini berupa data rating numerik, dan RMSE dapat memberikan gambaran seberapa jauh prediksi model terhadap nilai aktual.
 
 **Hasil Evaluasi**
+1. Content-Based Filtering
+
+- Evaluasi dilakukan secara kualitatif dengan memeriksa 10 anime teratas yang direkomendasikan berdasarkan satu anime favorit pengguna.
+- Contoh input:
+"Fullmetal Alchemist: Brotherhood" → Genre: Action, Adventure, Drama, Fantasy, Magic, Military
+- Rekomendasi yang dihasilkan memiliki genre yang sangat mirip, seperti:
+1). Fullmetal Alchemist: The Sacred Star of Milos
+2). Tales of Vesperia: The First Strike
+3). Jikuu Tenshou Nazca
+4). Fire Emblem
+5). dll.
+- Observasi:
+1). Semua anime yang direkomendasikan memiliki kesamaan genre yang tinggi.
+2). Rekomendasi dirasa relevan dan masuk akal dari sisi konten, meskipun tidak mempertimbangkan histori rating pengguna.
+3). Cocok untuk cold-start problem, terutama bagi pengguna baru tanpa histori interaksi.
+
+
+2. Collaborative Filtering
+
+
 - Dari grafik hasil training model, terlihat bahwa nilai RMSE pada data training dan validation terus menurun dan stabil, menunjukkan bahwa model berhasil mempelajari representasi preferensi pengguna dengan cukup baik. Berikut adalah visualisasi metriknya:
 ![rmse](assets/rmse.png)
 
-- Prediksi rating terhadap anime yang belum ditonton untuk user tertentu menunjukkan hasil yang masuk akal, dan 10 rekomendasi teratas mencerminkan relevansi terhadap anime yang sebelumnya disukai oleh pengguna tersebut.
+- Prediksi rating terhadap anime yang belum ditonton untuk user tertentu menunjukkan hasil yang masuk akal, dan 10 rekomendasi teratas mencerminkan relevansi terhadap anime yang sebelumnya disukai oleh pengguna tersebut, contohnya:
+1). Monster
+2). Ginga Eiyuu Densetsu
+3). Gintama
+4). Mushishi Zoku Shou
+5). dll.
+- Observasi:
+1). Rekomendasi personal dan relevan.
+2). Akurasi model dapat diukur secara kuantitatif menggunakan RMSE.
+
+**Perbandingan Pendekatan**
+| Pendekatan              | Teknik                              | Fitur/Target Data | Metrik Evaluasi   | Hasil & Observasi                                   |
+| ----------------------- | ----------------------------------- | ----------------- | ----------------- | --------------------------------------------------- |
+| Content-Based Filtering | TFIDF Genre + Cosine Similarity | Genre anime       | Cosine Similarity | Relevansi konten tinggi, cocok untuk pengguna baru  |
+| Collaborative Filtering | Neural Network (MSE + RMSE)  | Rating eksplisit  | RMSE              | Relevan secara personal, cocok untuk pengguna aktif |
+
+**Keterkaitan dengan Business Understanding**
+Model ini dikembangkan untuk menyediakan sistem rekomendasi anime yang relevan dan personal guna meningkatkan pengalaman pengguna dalam menemukan anime yang sesuai dengan preferensi mereka. Pendekatan ini bertujuan untuk menjawab kebutuhan pengguna dalam mencari anime secara cepat, efisien, dan sesuai minat.
+
+- Problem Statements:
+1). Bagaimana cara mengembangkan sistem rekomendasi berbasis content-based filtering untuk memberikan rekomendasi anime yang sesuai preferensi pengguna?
+2) Bagaimana cara mengembangkan sistem rekomendasi berbasis collaborative filtering untuk memberikan rekomendasi anime yang sesuai preferensi pengguna?
+
+- Goals:
+1). Mengembangkan sistem rekomendasi berbasis content-based filtering yang mampu menyarankan anime dengan genre serupa berdasarkan preferensi pengguna.
+2). Mengembangkan sistem rekomendasi berbasis collaborative filtering yang mampu memberikan rekomendasi personal berdasarkan data interaksi pengguna sebelumnya.
+
+- Evaluasi Solusi:
+1). Content-Based Filtering
+✔ Cocok untuk pengguna baru (cold-start problem) karena hanya membutuhkan preferensi awal atau genre anime yang disukai.
+✔ Memberikan hasil rekomendasi yang relevan berdasarkan kemiripan fitur genre.
+2). Collaborative Filtering
+✔ Menghasilkan rekomendasi personal berdasarkan pola perilaku pengguna lain dengan preferensi serupa.
+✔ Memerlukan data interaksi pengguna (seperti rating) dan efektif untuk pengguna aktif.
+
+- Dampak terhadap Tujuan
+1). Pendekatan ganda ini terbukti mampu:
+2). Menjawab kedua problem statements secara spesifik.
+3). Mencapai goals yang telah ditentukan melalui pendekatan sistematis.
+4). Meningkatkan pengalaman pengguna dengan menghadirkan rekomendasi yang lebih relevan, baik untuk pengguna baru maupun lama.
+
 
 
 ## Contact
